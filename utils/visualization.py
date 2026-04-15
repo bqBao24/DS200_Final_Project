@@ -1,4 +1,3 @@
-"""Visualization utilities."""
 import random
 import numpy as np
 import torch
@@ -9,14 +8,12 @@ from model import compute_iou, xywh2xyxy, sanitize_bbox
 
 
 def denormalize_image(img_tensor):
-    """Denormalize image tensor for visualization."""
     img = img_tensor.permute(1, 2, 0).numpy()
     img = img * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406])
     return np.clip(img, 0, 1)
 
 
 def visualize_predictions(model, dataset, config, num_samples=4, save_path=None):
-    """Visualize model predictions."""
     device = next(model.parameters()).device
     model.eval()
 
@@ -63,7 +60,6 @@ def visualize_predictions(model, dataset, config, num_samples=4, save_path=None)
 
 
 def plot_training_curves(histories, names):
-    """Plot training curves for multiple models."""
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
     
     for history, name in zip(histories, names):

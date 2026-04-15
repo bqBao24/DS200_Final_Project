@@ -1,4 +1,3 @@
-"""Loss functions for Visual Grounding."""
 import torch
 import torch.nn as nn
 
@@ -8,7 +7,6 @@ def box_area(boxes):
 
 
 def sanitize_bbox(boxes):
-    """Ensure valid bbox: x1 < x2, y1 < y2, in [0,1]."""
     x1, x2 = torch.min(boxes[:, 0], boxes[:, 2]), torch.max(boxes[:, 0], boxes[:, 2])
     y1, y2 = torch.min(boxes[:, 1], boxes[:, 3]), torch.max(boxes[:, 1], boxes[:, 3])
     return torch.stack([x1, y1, x2, y2], dim=1).clamp(0, 1)
@@ -25,7 +23,6 @@ def xyxy2xywh(boxes):
 
 
 def giou_loss(pred, gt, eps=1e-6):
-    """Generalized IoU loss."""
     inter_x1 = torch.max(pred[:, 0], gt[:, 0])
     inter_y1 = torch.max(pred[:, 1], gt[:, 1])
     inter_x2 = torch.min(pred[:, 2], gt[:, 2])
@@ -44,9 +41,7 @@ def giou_loss(pred, gt, eps=1e-6):
     return (1 - (iou - (encl_area - union) / encl_area)).mean()
 
 
-class VisualGroundingLoss(nn.Module):
-    """Combined L1 + GIoU loss (TransVG style)."""
-    
+class VisualGroundingLoss(nn.Module):    
     def __init__(self, l1_weight=1.0, giou_weight=2.0):
         super().__init__()
         self.l1_weight = l1_weight

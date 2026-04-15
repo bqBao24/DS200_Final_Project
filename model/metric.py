@@ -1,9 +1,7 @@
-"""Metrics for Visual Grounding."""
 import torch
 
 
 def compute_iou(pred, gt, eps=1e-6):
-    """Compute IoU between predicted and ground truth bboxes (xyxy format)."""
     inter_x1 = torch.max(pred[:, 0], gt[:, 0])
     inter_y1 = torch.max(pred[:, 1], gt[:, 1])
     inter_x2 = torch.min(pred[:, 2], gt[:, 2])
@@ -18,5 +16,4 @@ def compute_iou(pred, gt, eps=1e-6):
 
 
 def accuracy_at_iou(pred, gt, threshold=0.5):
-    """Accuracy at IoU threshold."""
     return (compute_iou(pred, gt) >= threshold).float().mean().item()

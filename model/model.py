@@ -1,15 +1,12 @@
-"""TransVG Model Architecture."""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import timm
 from transformers import BertModel
-
 from base import BaseModel
 
 
 class MLP(nn.Module):
-    """MLP for bbox prediction."""
     def __init__(self, input_dim, hidden_dim, output_dim, num_layers):
         super().__init__()
         h = [hidden_dim] * (num_layers - 1)
@@ -25,7 +22,6 @@ class MLP(nn.Module):
 
 
 class VisualLinguisticTransformer(nn.Module):
-    """VL Transformer with [REG] token."""
     def __init__(self, d_model, nhead=8, num_layers=4, dropout=0.1):
         super().__init__()
         encoder_layer = nn.TransformerEncoderLayer(
@@ -40,9 +36,7 @@ class VisualLinguisticTransformer(nn.Module):
         return self.norm(self.transformer(tokens, src_key_padding_mask=mask))
 
 
-class TransVG(BaseModel):
-    """TransVG: End-to-End Visual Grounding with Transformers."""
-    
+class TransVG(BaseModel):    
     BACKBONES = {
         'vit': ('vit_base_patch16_224', 768, 196),
         'convnext': ('convnextv2_base.fcmae_ft_in22k_in1k', 1024, 49),
